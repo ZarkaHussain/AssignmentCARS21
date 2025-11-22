@@ -1,0 +1,45 @@
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.deps.json
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.runtimeconfig.json
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.csproj.AssemblyReference.cache
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.GeneratedMSBuildEditorConfig.editorconfig
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.AssemblyInfoInputs.cache
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.AssemblyInfo.cs
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.csproj.CoreCompileInputs.cache
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/refint/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.genruntimeconfig.cache
+/Users/zarkahussain/Desktop/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/ref/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.deps.json
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.runtimeconfig.json
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/bin/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.csproj.AssemblyReference.cache
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.GeneratedMSBuildEditorConfig.editorconfig
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.AssemblyInfoInputs.cache
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.AssemblyInfo.cs
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.csproj.CoreCompileInputs.cache
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/refint/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/AssignmentCARS.genruntimeconfig.cache
+/Users/zarkahussain/Desktop/DIAGRAM SS/AssignmentCARS/AssignmentCARS/obj/Debug/net6.0/ref/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS21/bin/Debug/net6.0/AssignmentCARS
+/Users/zarkahussain/Desktop/AssignmentCARS21/bin/Debug/net6.0/AssignmentCARS.deps.json
+/Users/zarkahussain/Desktop/AssignmentCARS21/bin/Debug/net6.0/AssignmentCARS.runtimeconfig.json
+/Users/zarkahussain/Desktop/AssignmentCARS21/bin/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS21/bin/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.csproj.AssemblyReference.cache
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.GeneratedMSBuildEditorConfig.editorconfig
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.AssemblyInfoInputs.cache
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.AssemblyInfo.cs
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.csproj.CoreCompileInputs.cache
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/refint/AssignmentCARS.dll
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.pdb
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/AssignmentCARS.genruntimeconfig.cache
+/Users/zarkahussain/Desktop/AssignmentCARS21/obj/Debug/net6.0/ref/AssignmentCARS.dll
