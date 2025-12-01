@@ -6,6 +6,7 @@ namespace AssignmentCARS
 {
     public class Customer
     {
+        public string CustomerID { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
         public int Level { get; set; } = 1; // 1=Standard, 5=Premium, 10=VIP
@@ -13,8 +14,9 @@ namespace AssignmentCARS
         protected List<string> rentalHistory;
         public IReadOnlyList<string> RentalHistory => rentalHistory.AsReadOnly();
 
-        public Customer()  // parameterless constructor for loading
+        public Customer()
         {
+            CustomerID = "";
             Name = "";
             Password = "";
             Level = 1;
@@ -23,21 +25,32 @@ namespace AssignmentCARS
 
         public Customer(string name, string password, int level = 1)
         {
+            CustomerID = Guid.NewGuid().ToString();
             Name = name;
             Password = password;
             Level = level;
             rentalHistory = new List<string>();
         }
 
-        public void AddRental(string carName)
+        // Adds rental + checks for upgrade
+        public Customer AddRentalAndCheckUpgrade()
         {
-            rentalHistory.Add(carName);
+            rentalHistory.Add("Car rented"); // you can change this text
             UpdateLevelFromRentalCount();
+
+            if (Level == 5 && this is not PremiumCustomer)
+                return new PremiumCustomer(this);
+
+            if (Level == 10 && this is not VIPCustomer)
+                return new VIPCustomer(this);
+
+            return this;
         }
 
         private void UpdateLevelFromRentalCount()
         {
             int count = rentalHistory.Count;
+
             if (count >= 10)
                 Level = 10;
             else if (count >= 5)
@@ -46,8 +59,27 @@ namespace AssignmentCARS
                 Level = 1;
         }
 
+        public virtual void AddRental(string carName)
+        {
+            rentalHistory.Add(carName);
+
+            // Upgrade to Premium at 5 rentals
+            if (Level < 5 && rentalHistory.Count >= 5)
+            {
+                Level = 5; // Premium
+            }
+
+            // Upgrade to VIP at 10 rentals
+            if (Level < 10 && rentalHistory.Count >= 10)
+            {
+                Level = 10; // VIP
+            }
+        }
+
+
         public virtual void SaveBinary(BinaryWriter bw)
         {
+            bw.Write(CustomerID);
             bw.Write(Name);
             bw.Write(Password);
             bw.Write(Level);
@@ -58,30 +90,20 @@ namespace AssignmentCARS
 
         public virtual void LoadBinary(BinaryReader br)
         {
+            CustomerID = br.ReadString();
             Name = br.ReadString();
             Password = br.ReadString();
             Level = br.ReadInt32();
+
             int count = br.ReadInt32();
             rentalHistory = new List<string>(count);
             for (int i = 0; i < count; i++)
                 rentalHistory.Add(br.ReadString());
         }
-
-        public override string ToString()
-        {
-            string levelName = Level switch
-            {
-                10 => "VIP",
-                5 => "Premium",
-                _ => "Standard"
-            };
-            return $"Customer Name: {Name}\n" +
-                   $"Password: {Password}\n" +
-                   $"Level: {levelName}\n" +
-                   $"Rental History: {string.Join(", ", rentalHistory)}";
-        }
     }
 }
+
+//rental history saved in customer class// needs own;
 
 
 

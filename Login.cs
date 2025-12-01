@@ -10,9 +10,9 @@ namespace AssignmentCARS
 
         public Customer Login1(Dictionary<string, Customer> customers)
         {
-            while (true) //keep looping until login succeeds
+            while (true)
             {
-                //get username
+                // name
                 string loginName;
                 while (true)
                 {
@@ -20,6 +20,7 @@ namespace AssignmentCARS
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("=== LOGIN ===\n");
                     Console.ResetColor();
+
                     Console.Write("Enter your full name: ");
                     loginName = Console.ReadLine()?.Trim() ?? "";
 
@@ -29,10 +30,9 @@ namespace AssignmentCARS
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Name cannot be empty.");
                     Console.ReadKey();
-                    Console.ResetColor();
                 }
 
-                //get password
+                // password
                 string loginPassword;
                 while (true)
                 {
@@ -47,21 +47,26 @@ namespace AssignmentCARS
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Password cannot be empty.");
                     Console.ReadKey();
-                    Console.ResetColor();
                 }
 
                 Console.Clear();
 
-                //check login detials
-                if (customers.TryGetValue(loginName, out Customer c) && c.Password == loginPassword)
+                // Find customer by name
+                foreach (var cust in customers.Values)
                 {
-                    Console.WriteLine($"Welcome back, {c.Name}!");
-                    Console.WriteLine($"Your current level: {LevelName(c.Level)}");
-                    _pause();
-                    return c; //login successful then return customer
+                    if (cust.Name.Equals(loginName, StringComparison.OrdinalIgnoreCase)
+                        && cust.Password == loginPassword)
+                    {
+                        Console.WriteLine($"Welcome back, {cust.Name}!");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"\nYour current level: {LevelName(cust.Level)}");
+                        Console.ResetColor();
+                        _pause();
+                        return cust;
+                    }
                 }
 
-                //login details incorrect loops again
+                // failed login
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Username or password incorrect. Please try again.");
                 Console.ResetColor();
@@ -77,8 +82,6 @@ namespace AssignmentCARS
         };
     }
 }
-
-
 
 //if
 //(!found)

@@ -6,23 +6,28 @@ namespace AssignmentCARS
 {
     public static class BinaryRepository
     {
-        public static Dictionary<string, Customer> Load(string path)
+
+        private static readonly string folder = "customers";
+
+        static BinaryRepository()
         {
-            var customers = new Dictionary<string, Customer>(StringComparer.OrdinalIgnoreCase);
+            if (!Directory.Exists(folder))
 
-            if (!File.Exists(path))
-                return customers;
+                Directory.CreateDirectory(folder);
+        }
 
-            FileStream file = File.Open(path, FileMode.Open);
-            BinaryReader br = new BinaryReader(file);
+        public static Dictionary<string, Customer> LoadAll()
+        {
+            var dict = new Dictionary<string, Customer>(StringComparer.OrdinalIgnoreCase);
 
-            try
+            foreach (string path in Directory.GetFiles(folder, "*.dat"))
             {
-                int count = br.ReadInt32(); //reads count first
-
-                for (int i = 0; i < count; i++) //then reads each object
+                try
                 {
-                    string type = br.ReadString(); //read type string first to handle polymorphism (Customer,Premium,VIP)
+                    using FileStream file = File.Open(path, FileMode.Open, FileAccess.Read);
+                    using BinaryReader br = new BinaryReader(file);
+
+                    string type = br.ReadString();
 
                     Customer cust = type switch
                     {
@@ -33,55 +38,80 @@ namespace AssignmentCARS
 
                     cust.LoadBinary(br);
 
-                    if (!string.IsNullOrWhiteSpace(cust.Name))
-                        customers[cust.Name] = cust;
+                    if (!string.IsNullOrWhiteSpace(cust.CustomerID))
+                        dict[cust.CustomerID] = cust;
+                }
+                catch (FileNotFoundException)// this exception is when a file aint found
+                {
+                    Console.WriteLine($"File not found: {Path.GetFileName(path)}");
+                }
+                catch (EndOfStreamException)
+                {
+                    Console.WriteLine($"File corrupted (unexpected end): {Path.GetFileName(path)}");
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"I/O error reading {Path.GetFileName(path)}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    //fallback for anything else unexpected happening
+                    Console.WriteLine($"Error loading {Path.GetFileName(path)}: {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading customer data: {ex.Message}");
-            }
-            finally
-            {
-                br.Close();
-                file.Close();
-            }
 
-            return customers;
+            return dict;
         }
 
-        public static void Save(Dictionary<string, Customer> customers, string path)
+
+        public static void SaveCustomer(Customer cust)
         {
-            FileStream file = File.Open(path, FileMode.Create);
-            BinaryWriter bw = new BinaryWriter(file);
+            //Validate early
+            if (cust == null || string.IsNullOrWhiteSpace(cust.CustomerID))
+            {
+                Console.WriteLine("Invalid customer object.");
+                return;
+            }
 
             try
             {
-                bw.Write(customers.Count); //writes count first
+                string path = Path.Combine(folder, $"{cust.CustomerID}.dat");
+                using FileStream file = File.Open(path, FileMode.Create, FileAccess.Write);
+                using BinaryWriter bw = new BinaryWriter(file);
 
-                foreach (Customer cust in customers.Values)
+                string type = cust switch
                 {
+                    PremiumCustomer => "Premium",
+                    VIPCustomer => "VIP",
+                    _ => "Customer"
+                };
 
-                    string type = cust switch
-                    {
-                        PremiumCustomer => "Premium",
-                        VIPCustomer => "VIP",
-                        _ => "Customer"
-                    };
+                bw.Write(type);
+                cust.SaveBinary(bw);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error saving customer {cust?.CustomerID}: {ex.Message}");
+            }
+            
+        }
 
-                    bw.Write(type); //write type string
-                    cust.SaveBinary(bw); //each customer saves
-                }
-            }
-            catch (Exception ex)
+     
+
+
+        public static void SaveAll(Dictionary<string, Customer> customers)
+        {
+            foreach (var cust in customers.Values)
             {
-                Console.WriteLine($"Error saving customer data: {ex.Message}");
-            }
-            finally
-            {
-                bw.Close(); 
-                file.Close();
+                SaveCustomer(cust);
             }
         }
+
+        public static Dictionary<string, Customer> Load()
+        {
+            return LoadAll();
+        }
+
+
     }
 }

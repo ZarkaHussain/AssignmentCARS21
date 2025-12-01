@@ -5,7 +5,7 @@ namespace AssignmentCARS
 {
     public static class MainMenu
     {
-        public static void Show(Customer customer, Action save)  // ← Added Action save parameter
+        public static void Show(Customer customer, Action save)
         {
             while (true)
             {
@@ -20,46 +20,77 @@ namespace AssignmentCARS
                 Console.WriteLine("4) Logout");
                 Console.WriteLine("5) Quit Program");
                 Console.Write("\nChoose an option: ");
-                string option = Console.ReadLine()?.Trim();
+                string option = Console.ReadLine()?.Trim() ?? "";
                 Console.Clear();
+
                 switch (option)
                 {
-                    case "1": RentCar.Show(customer, save);
-                        break;  //calls RentCar
-                    case "2": Console.WriteLine("Feature coming soon!");
+                    case "1":
+                        customer = RentCar.Show(customer, save);
+                        save();                       // Save upgraded customer
+                        break;
+
+                    case "2":
+                        PrintRentalHistory(customer);
                         Pause();
                         break;
-                    case "3": ShowAccountInfo(customer);
+
+                    case "3":
+                        ShowAccountInfo(customer);
                         break;
-                    case "4": Console.WriteLine("Logging out...");
+
+                    case "4":
+                        Console.WriteLine("Logging out...");
                         Thread.Sleep(700);
                         return;
-                    case "5": Console.WriteLine("Thank you for using Car World!");
+
+                    case "5":
+                        Console.WriteLine("Thank you for using Car World!");
                         Thread.Sleep(1500);
                         Environment.Exit(0);
                         break;
-                    default: Console.WriteLine("Invalid option.");
+
+                    default:
+                        Console.WriteLine("Invalid option.");
                         Pause();
                         break;
                 }
             }
         }
 
+        private static void PrintRentalHistory(Customer customer)
+        {
+            Console.WriteLine("Rental History:{0}",
+                customer.RentalHistory.Count > 0
+                ? string.Join(", ", customer.RentalHistory)
+                : "None");
+        }
+
         private static void ShowAccountInfo(Customer customer)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("===== ACCOUNT INFORMATION =====\n");
+            Console.ResetColor();
+
             Console.WriteLine("Customer Name: {0}", customer.Name);
             Console.WriteLine("Password: {0}", customer.Password);
             Console.WriteLine("Level: {0}", LevelName(customer.Level));
-            Console.WriteLine("Rental History: {0}",
-                customer.RentalHistory.Count > 0
-                    ? string.Join(", ", customer.RentalHistory)
-                    : "None");
+
+            PrintRentalHistory(customer);
             Pause();
         }
 
-        private static string LevelName(int level) => level switch { 10 => "VIP", 5 => "Premium", _ => "Standard" };
-        private static void Pause() { Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey(); }
+        private static string LevelName(int level) => level switch
+        {
+            10 => "VIP",
+            5 => "Premium",
+            _ => "Standard"
+        };
+
+        private static void Pause()
+        {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
     }
 }

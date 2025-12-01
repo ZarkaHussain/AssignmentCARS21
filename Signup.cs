@@ -8,9 +8,10 @@ namespace AssignmentCARS
         private readonly Action _pause;
         public Signup(Action pauseFunction) => _pause = pauseFunction;
 
-        public Customer Signup1(Dictionary<string, Customer> customers, Action saveCustomers)
+        public Customer Signup1(Dictionary<string, Customer> customers, Action saveAll)
         {
             string newName;
+            //get names that arent duplicated
             while (true)
             {
                 Console.Clear();
@@ -27,17 +28,25 @@ namespace AssignmentCARS
                     continue;
                 }
 
-                if (customers.ContainsKey(newName))
+                // Check duplicate names
+                bool duplicate = false;
+                foreach (var c in customers.Values)
                 {
-                    Console.WriteLine("This name is already registered.");
-                    Console.ReadKey();
-                    continue;
+                    if (c.Name.Equals(newName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("This name is already registered.");
+                        Console.ReadKey();
+                        duplicate = true;
+                        break;
+                    }
                 }
 
-                break;
+                if (!duplicate)
+                    break;   //this exits the loop if the name is valid  
             }
 
             string newPassword;
+            //get valid password
             while (true)
             {
                 Console.Clear();
@@ -64,9 +73,17 @@ namespace AssignmentCARS
                 break;
             }
 
+            // Create new customer (auto creates CustomerID)
             Customer newCustomer = new Customer(newName, newPassword);
-            customers[newName] = newCustomer;
-            saveCustomers();
+
+            // Add using CustomerID as key
+            customers[newCustomer.CustomerID] = newCustomer;
+
+            // Save customer file
+            BinaryRepository.SaveCustomer(newCustomer);
+
+            // SaveAll updates master list if needed
+            saveAll();
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkGreen;

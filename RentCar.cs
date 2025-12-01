@@ -8,8 +8,8 @@ namespace AssignmentCARS
     {
         private static readonly IEnumerable<Car> allCars = new List<Car>
         {
-			//standard customer cars (Level1)
-			new Car("Toyota", "Corolla", "Sedan", 5, 45.00m, 1),
+            //standard customer cars (Level1)
+            new Car("Toyota", "Corolla", "Sedan", 5, 45.00m, 1),
             new Car("Honda", "Civic", "Sedan", 5, 50.00m, 1),
             new Car("Ford", "Focus", "Hatchback", 5, 42.00m, 1),
 
@@ -22,17 +22,17 @@ namespace AssignmentCARS
             new Car("Porsche", "911", "Sports Car", 2, 350.00m, 10),
             new Car("Lamborghini", "Huracan", "Supercar", 2, 800.00m, 10),
             new Car("Ferrari", "F8", "Supercar", 2, 900.00m, 10),
-
         };
 
         private static IEnumerable<Car> GetAvailableCars(int customerLevel)
         {
-            return allCars.Where(c => c.RequiredLevel <= customerLevel)
+            return allCars
+                .Where(c => c.RequiredLevel <= customerLevel)
                 .OrderBy(c => c.RequiredLevel)
                 .ThenBy(c => c.Price);
         }
 
-        public static void Show(Customer customer, Action save)
+        public static Customer Show(Customer customer, Action save)
         {
             while (true)
             {
@@ -41,7 +41,6 @@ namespace AssignmentCARS
                 Console.WriteLine("===== RENT A CAR =====\n");
                 Console.ResetColor();
 
-                //filters cars based on levels
                 var availableCars = GetAvailableCars(customer.Level).ToList();
 
                 if (availableCars.Count == 0)
@@ -50,11 +49,13 @@ namespace AssignmentCARS
                     Console.WriteLine("No cars available for your level.");
                     Console.ResetColor();
                     Pause();
-                    return;
+                    return customer;
                 }
+
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine($"Your Level: {GetLevelName(customer.Level)}\n");
                 Console.ResetColor();
+
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine("Available cars:\n");
                 Console.ResetColor();
@@ -67,34 +68,32 @@ namespace AssignmentCARS
                 Console.WriteLine($"\n{availableCars.Count + 1}) Go Back");
                 Console.Write("\nChoose a car to rent: ");
 
-                string input = Console.ReadLine()?.Trim();
+                string input = Console.ReadLine()?.Trim() ?? "";
 
                 if (int.TryParse(input, out int choice))
                 {
                     if (choice == availableCars.Count + 1)
-                    {
-                        return;
-                    }
-                    else if (choice >= 1 && choice <= availableCars.Count)
+                        return customer;
+
+                    if (choice >= 1 && choice <= availableCars.Count)
                     {
                         Car selectedCar = availableCars[choice - 1];
-                        ConfirmRental(customer, selectedCar, save);
+                        customer = ConfirmRental(customer, selectedCar, save);
+                        return customer; // IMPORTANT: return upgraded customer
                     }
-                    else
-                    {
-                        Console.WriteLine("\nInvalid option. Please select a number from the list.");
-                        Pause();
-                    }
+
+                    Console.WriteLine("\nInvalid option.");
+                    Pause();
                 }
                 else
                 {
-                    Console.WriteLine("\nInvalid input. Please enter a number from the list to select a car."); 
+                    Console.WriteLine("\nInvalid input.");
                     Pause();
                 }
             }
         }
 
-        private static void ConfirmRental(Customer customer, Car car, Action save)
+        private static Customer ConfirmRental(Customer customer, Car car, Action save)
         {
             while (true)
             {
@@ -102,38 +101,44 @@ namespace AssignmentCARS
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("===== CONFIRM RENTAL =====\n");
                 Console.ResetColor();
+
                 Console.WriteLine($"Car: {car.Make} {car.Model}");
                 Console.WriteLine($"Type: {car.Type}");
                 Console.WriteLine($"Price: £{car.Price:F2}/day\n");
+
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Confirm rental? (y/n): ");
                 Console.ResetColor();
 
-                string confirm = Console.ReadLine()?.Trim().ToLower();
+                string confirm = Console.ReadLine()?.Trim().ToLower() ?? "";
 
                 if (confirm == "y" || confirm == "yes")
                 {
                     customer.AddRental($"{car.Make} {car.Model}");
-                    save(); //saves updated customer data
+
+                    // Level upgrade happens inside AddRental()
+
+                    save(); // saves single customer file
+
                     Console.WriteLine($"\nSuccessfully rented {car.Make} {car.Model}!");
                     Console.WriteLine($"Your current level: {GetLevelName(customer.Level)}");
+
                     Pause();
-                    return;
+                    return customer; // return possibly upgraded customer object
                 }
                 else if (confirm == "n" || confirm == "no")
                 {
                     Console.WriteLine("\nRental cancelled.");
                     Pause();
-                    return;
+                    return customer;
                 }
                 else
                 {
-                    Console.WriteLine("\nInvalid input. Please enter 'y' for yes or 'n' for no.");
+                    Console.WriteLine("\nInvalid input. Enter 'y' or 'n'.");
                     Pause();
                 }
             }
         }
-
 
         private static string GetLevelName(int level) => level switch
         {
@@ -147,9 +152,5 @@ namespace AssignmentCARS
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
-
-
-
     }
-
 }
