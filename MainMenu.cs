@@ -14,20 +14,25 @@ namespace AssignmentCARS
                 Console.WriteLine("===== HOME MENU =====");
                 Console.ResetColor();
                 Console.WriteLine($"\nUser: {customer.Name}  Level: {LevelName(customer.Level)}\n");
-                Console.WriteLine("1) Rent a Car");
-                Console.WriteLine("2) View Rental History");
-                Console.WriteLine("3) Show Account Info");
-                Console.WriteLine("4) Logout");
-                Console.WriteLine("5) Quit Program");
+
+                MenuOption(1, "Rent a Car");
+                MenuOption(2, "View Rental History");
+                MenuOption(3, "Show Account Info");
+                MenuOption(4, "Logout");
+                MenuOption(5, "Quit Program");
                 Console.Write("\nChoose an option: ");
-                string option = Console.ReadLine()?.Trim() ?? "";
+
+                char key = Console.ReadKey(true).KeyChar;
+                string option = key.ToString();
+                Console.WriteLine(key);
+                //string option = Console.ReadLine()?.Trim() ?? "";
                 Console.Clear();
 
                 switch (option)
                 {
                     case "1":
                         customer = RentCar.Show(customer, save);
-                        save();                       // Save upgraded customer
+                        save();                       // save upgraded customer
                         break;
 
                     case "2":
@@ -58,13 +63,34 @@ namespace AssignmentCARS
             }
         }
 
+        private static void MenuOption(int number, string text)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(number);
+            Console.ResetColor();
+            Console.WriteLine($") {text}");
+        }
+
+
         private static void PrintRentalHistory(Customer customer)
         {
-            Console.WriteLine("Rental History:{0}",
-                customer.RentalHistory.Count > 0
-                ? string.Join(", ", customer.RentalHistory)
-                : "None");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("===== RENTAL HISTORY ===== ");
+            Console.WriteLine();
+            Console.ResetColor();
+
+            if (customer.RentalHistory.Count == 0)
+            {
+                Console.WriteLine("  None");
+                return;
+            }
+
+            foreach (var rental in customer.RentalHistory)
+            {
+                Console.WriteLine($"  - {rental}");
+            }
         }
+
 
         private static void ShowAccountInfo(Customer customer)
         {
@@ -75,6 +101,7 @@ namespace AssignmentCARS
             Console.WriteLine("Customer Name: {0}", customer.Name);
             Console.WriteLine("Password: {0}", customer.Password);
             Console.WriteLine("Level: {0}", LevelName(customer.Level));
+            Console.WriteLine();
 
             PrintRentalHistory(customer);
             Pause();

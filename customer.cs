@@ -32,10 +32,10 @@ namespace AssignmentCARS
             rentalHistory = new List<string>();
         }
 
-        // Adds rental + checks for upgrade
+        // adds rental + checks for upgrade
         public Customer AddRentalAndCheckUpgrade()
         {
-            rentalHistory.Add("Car rented"); // you can change this text
+            rentalHistory.Add("Car rented"); 
             UpdateLevelFromRentalCount();
 
             if (Level == 5 && this is not PremiumCustomer)
@@ -63,16 +63,16 @@ namespace AssignmentCARS
         {
             rentalHistory.Add(carName);
 
-            // Upgrade to Premium at 5 rentals
+            // upgrade to premium at 5 rentals
             if (Level < 5 && rentalHistory.Count >= 5)
             {
                 Level = 5; // Premium
             }
 
-            // Upgrade to VIP at 10 rentals
+            // upgrade to VIP at 10 rentals
             if (Level < 10 && rentalHistory.Count >= 10)
             {
-                Level = 10; // VIP
+                Level = 10; //VIP
             }
         }
 
@@ -101,7 +101,7 @@ namespace AssignmentCARS
                 rentalHistory.Add(br.ReadString());
         }
     }
-}
+}  
 
 //rental history saved in customer class// needs own;
 

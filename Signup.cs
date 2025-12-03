@@ -18,7 +18,7 @@ namespace AssignmentCARS
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("=== SIGNUP ===\n");
                 Console.ResetColor();
-                Console.Write("Enter your full name: ");
+                Console.Write("Enter your full name and hit enter: ");
                 newName = Console.ReadLine()?.Trim() ?? "";
 
                 if (string.IsNullOrWhiteSpace(newName))
@@ -28,7 +28,7 @@ namespace AssignmentCARS
                     continue;
                 }
 
-                // Check duplicate names
+                //check duplicate names
                 bool duplicate = false;
                 foreach (var c in customers.Values)
                 {
@@ -53,7 +53,7 @@ namespace AssignmentCARS
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine($"Name: {newName}");
                 Console.ResetColor();
-                Console.Write("\nCreate a password (minimum 12 characters): ");
+                Console.Write("\nCreate a password (minimum 12 characters) and hit enter : ");
                 newPassword = Console.ReadLine()?.Trim() ?? "";
 
                 if (string.IsNullOrWhiteSpace(newPassword))
@@ -73,10 +73,10 @@ namespace AssignmentCARS
                 break;
             }
 
-            // Create new customer (auto creates CustomerID)
+            // create new customer (auto creates CustomerID)
             Customer newCustomer = new Customer(newName, newPassword);
 
-            // Add using CustomerID as key
+            //add using CustomerID as key
             customers[newCustomer.CustomerID] = newCustomer;
 
             // Save customer file
@@ -86,7 +86,7 @@ namespace AssignmentCARS
             saveAll();
 
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"Welcome onboard, {newCustomer.Name}!");
             Console.ResetColor();
             _pause();

@@ -25,7 +25,7 @@ namespace AssignmentCARS
             string user = args[1];
             string pass = args[2];
 
-            // Authenticate admin
+            // authenticate admin
             if (user != _adminUser || pass != _adminPass)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -53,27 +53,28 @@ namespace AssignmentCARS
                 Console.WriteLine("5) Exit Admin Menu");
 
                 Console.Write("\nSelect an option: ");
-                string choice = Console.ReadLine()?.Trim() ?? "";
 
-                switch (choice)
+                char key = Console.ReadKey(true).KeyChar;
+
+                switch (key)
                 {
-                    case "1":
+                    case '1':
                         AdminStats.ShowTotalRentals();
                         break;
 
-                    case "2":
+                    case '2':
                         AdminStats.ShowMostRentedCars();
                         break;
 
-                    case "3":
+                    case '3':
                         AdminCustomerManager.ShowCustomers();
                         break;
 
-                    case "4":
+                    case '4':
                         AdminCustomerManager.DeleteCustomer();
                         break;
 
-                    case "5":
+                    case '5':
                         return;
 
                     default:

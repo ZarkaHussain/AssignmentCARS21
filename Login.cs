@@ -21,11 +21,13 @@ namespace AssignmentCARS
                     Console.WriteLine("=== LOGIN ===\n");
                     Console.ResetColor();
 
-                    Console.Write("Enter your full name: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Enter your full name and hit enter: ");
+                    Console.ResetColor();
                     loginName = Console.ReadLine()?.Trim() ?? "";
 
                     if (!string.IsNullOrWhiteSpace(loginName))
-                        break;
+                        break; 
 
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Name cannot be empty.");
@@ -38,7 +40,9 @@ namespace AssignmentCARS
                 {
                     Console.Clear();
                     Console.WriteLine($"Name: {loginName}\n");
-                    Console.Write("Enter your password: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Enter your password and hit enter: ");
+                    Console.ResetColor();
                     loginPassword = Console.ReadLine()?.Trim() ?? "";
 
                     if (!string.IsNullOrWhiteSpace(loginPassword))
@@ -51,13 +55,15 @@ namespace AssignmentCARS
 
                 Console.Clear();
 
-                // Find customer by name
+                // find customer by name
                 foreach (var cust in customers.Values)
                 {
                     if (cust.Name.Equals(loginName, StringComparison.OrdinalIgnoreCase)
                         && cust.Password == loginPassword)
                     {
+                        Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine($"Welcome back, {cust.Name}!");
+                        Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine($"\nYour current level: {LevelName(cust.Level)}");
                         Console.ResetColor();

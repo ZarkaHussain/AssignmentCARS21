@@ -11,7 +11,7 @@ namespace AssignmentCARS
         {
             Dictionary<string, Customer> customers = new();
 
-            // Small try/catch: only around loading customers
+            //small try/catch: only around loading customers
             try
             {
                 customers = BinaryRepository.LoadAll();
@@ -48,8 +48,8 @@ namespace AssignmentCARS
 
                 Console.Write("\nSelect a customer to view more details: ");
 
-                string input = Console.ReadLine() ?? "";
-                if (!int.TryParse(input, out int choice)
+                char key = Console.ReadKey(true).KeyChar;
+                if (!int.TryParse(key.ToString(), out int choice)
 
                     || choice < 1 || choice > backOption)
                 {
@@ -90,7 +90,7 @@ namespace AssignmentCARS
         {
             Dictionary<string, Customer> customers = new();
 
-            // Small try/catch for load
+            // small try/catch for load
             try
             {
                 customers = BinaryRepository.LoadAll();
@@ -127,9 +127,9 @@ namespace AssignmentCARS
 
                 Console.Write("\nSelect a customer to delete: ");
 
-                string input = Console.ReadLine() ?? "";
-                if (!int.TryParse(input, out int choice)
-                    || choice < 1 || choice > backOption)
+                char key = Console.ReadKey(true).KeyChar;
+                if (!int.TryParse(key.ToString(), out int choice)
+                || choice < 1 || choice > backOption)
                 {
                     Console.WriteLine("Invalid selection.");
                     Pause();
@@ -157,7 +157,7 @@ namespace AssignmentCARS
 
                 string filePath = $"customers/{target.CustomerID}.dat";
 
-                // Small try/catch around actual file deletion
+                // small try/catch around actual file deletion
                 try
                 {
                     if (File.Exists(filePath))
@@ -182,10 +182,10 @@ namespace AssignmentCARS
                     return;
                 }
 
-                // Remove from dictionary
+                // remove from dictionary
                 customers.Remove(target.CustomerID);
 
-                // Small try/catch around SaveAll
+                // small try/catch around SaveAll
                 try
                 {
                     BinaryRepository.SaveAll(customers);

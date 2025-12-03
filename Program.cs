@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace AssignmentCARS
 {
@@ -15,11 +17,16 @@ namespace AssignmentCARS
                 return;
             }
 
-            // Load all customer files from /customers/
+            //load all customer files from /customers/
             var customers = BinaryRepository.LoadAll();
 
-            // Save action to write all .dat files
+            //THIS FOR Multiple Processor Testing
+            //RentCar.RunParallelTest();//
+
+
+            //thi save action writes to all .dat files
             Action saveAll = () => BinaryRepository.SaveAll(customers);
+
 
             var login = new Login(Pause);
             var signup = new Signup(Pause);
@@ -39,7 +46,10 @@ namespace AssignmentCARS
                 Console.WriteLine("(3) Quit");
                 Console.ResetColor();
                 Console.Write("\nChoose an option: ");
-                string input = Console.ReadLine()?.Trim() ?? "";
+                char key = Console.ReadKey(true).KeyChar;
+                string input = key.ToString();
+                Console.WriteLine(key);
+                //string input = Console.ReadLine()?.Trim() ?? "";
 
    
                 try
@@ -121,6 +131,7 @@ namespace AssignmentCARS
 
             Console.ResetColor();
         }
+
     }
 }
 
