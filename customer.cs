@@ -99,7 +99,7 @@ namespace AssignmentCARS
             rentalHistory = new List<string>(count);
             for (int i = 0; i < count; i++)
                 rentalHistory.Add(br.ReadString());
-        }
+        }        
     }
 }  
 

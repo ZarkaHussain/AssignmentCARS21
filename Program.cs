@@ -44,6 +44,7 @@ namespace AssignmentCARS
                 Console.WriteLine("\n(1) Signup");
                 Console.WriteLine("(2) Login");
                 Console.WriteLine("(3) Quit");
+                Console.WriteLine("(4) Performance Test(Multiple Processors");
                 Console.ResetColor();
                 Console.Write("\nChoose an option: ");
                 char key = Console.ReadKey(true).KeyChar;
@@ -57,7 +58,7 @@ namespace AssignmentCARS
                     if (!int.TryParse(input, out int option))
                         throw new FormatException();
 
-                    if (option < 1 || option > 3)
+                    if (option < 1 || option > 4)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Error: Please choose 1, 2, or 3.");
@@ -84,6 +85,11 @@ namespace AssignmentCARS
                             Thread.Sleep(1000);
                             Environment.Exit(0);
                             break;
+
+                        case 4:
+                            new PerformanceTest().MultipleProcessors(customers.Values.ToList());
+                            break;
+
                     }
                 }
                 catch (FormatException)

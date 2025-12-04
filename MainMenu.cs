@@ -20,6 +20,7 @@ namespace AssignmentCARS
                 MenuOption(3, "Show Account Info");
                 MenuOption(4, "Logout");
                 MenuOption(5, "Quit Program");
+
                 Console.Write("\nChoose an option: ");
 
                 char key = Console.ReadKey(true).KeyChar;
