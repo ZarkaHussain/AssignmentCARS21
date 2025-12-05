@@ -86,10 +86,12 @@ namespace AssignmentCARS
                 return;
             }
 
+            //Performance test improvement
+            //StringBuilder is used
+            var sb = new System.Text.StringBuilder();
             foreach (var rental in customer.RentalHistory)
-            {
-                Console.WriteLine($"  - {rental}");
-            }
+                sb.AppendLine($" - {rental}");
+            Console.Write(sb.ToString());            
         }
 
 

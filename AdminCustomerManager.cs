@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace AssignmentCARS
 {
@@ -40,17 +41,23 @@ namespace AssignmentCARS
                 Console.Clear();
                 Console.WriteLine("=== CUSTOMER LIST ===\n");
 
+                //StringBuilder added for performance
+                StringBuilder sb = new StringBuilder();
+
                 for (int i = 0; i < list.Count; i++)
-                    Console.WriteLine($"{i + 1}) {list[i].Name}");
+                    sb.AppendLine($"{i + 1}) {list[i].Name}");
+
+                Console.Write(sb.ToString());
 
                 int backOption = list.Count + 1;
                 Console.WriteLine($"\n{backOption}) Back");
 
-                Console.Write("\nSelect a customer to view more details: ");
+                Console.Write("\nInput a number to view that customer's details and press enter: ");
 
-                char key = Console.ReadKey(true).KeyChar;
-                if (!int.TryParse(key.ToString(), out int choice)
+                
+                string input = Console.ReadLine()?.Trim() ?? "";
 
+                if (!int.TryParse(input, out int choice)
                     || choice < 1 || choice > backOption)
                 {
                     Console.WriteLine("Invalid selection.");
@@ -94,7 +101,7 @@ namespace AssignmentCARS
             try
             {
                 customers = BinaryRepository.LoadAll();
-                
+
             }
             catch (Exception ex)
             {
@@ -119,17 +126,23 @@ namespace AssignmentCARS
                 Console.Clear();
                 Console.WriteLine("=== DELETE CUSTOMER ===\n");
 
+                //StringBuilder added for performance
+                StringBuilder sb = new StringBuilder();
+
                 for (int i = 0; i < list.Count; i++)
-                    Console.WriteLine($"{i + 1}) {list[i].Name}");
+                    sb.AppendLine($"{i + 1}) {list[i].Name}");
+
+                Console.Write(sb.ToString());
 
                 int backOption = list.Count + 1;
                 Console.WriteLine($"\n{backOption}) Back");
 
                 Console.Write("\nSelect a customer to delete: ");
 
-                char key = Console.ReadKey(true).KeyChar;
-                if (!int.TryParse(key.ToString(), out int choice)
-                || choice < 1 || choice > backOption)
+                string input = Console.ReadLine()?.Trim() ?? "";
+
+                if (!int.TryParse(input, out int choice)
+                    || choice < 1 || choice > backOption)
                 {
                     Console.WriteLine("Invalid selection.");
                     Pause();
@@ -139,14 +152,14 @@ namespace AssignmentCARS
                 if (choice == backOption)
                     return;
 
-                Customer target = list[choice - 1]; 
+                Customer target = list[choice - 1];
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"\nAre you sure you want to delete '{target.Name}'?");
                 Console.Write("Type YES to confirm: ");
                 Console.ResetColor();
 
-                string confirm = (Console.ReadLine()??"").Trim().ToUpper();
+                string confirm = (Console.ReadLine() ?? "").Trim().ToUpper();
 
                 if (confirm != "YES")
                 {
@@ -157,7 +170,7 @@ namespace AssignmentCARS
 
                 string filePath = $"customers/{target.CustomerID}.dat";
 
-                // small try/catch around actual file deletion
+                //small try/catch around actual file deletion
                 try
                 {
                     if (File.Exists(filePath))
@@ -208,7 +221,10 @@ namespace AssignmentCARS
         private static void Pause()
         {
             Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
+            Console.ReadKey(true);
+
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
         }
     }
 }
