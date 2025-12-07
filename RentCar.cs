@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace AssignmentCARS
 {
+    //static class for handling car rental menu
     public static class RentCar
     {
         private static readonly IEnumerable<Car> allCars = new List<Car>
@@ -25,6 +26,9 @@ namespace AssignmentCARS
             new Car("Ferrari", "F8", "Supercar", 2, 900.00m, 10),
         };
 
+        //filter cars based on customer's level
+        //only cars that user qualifies for are returned
+        //ordered by required level first then by price
         private static IEnumerable<Car> GetAvailableCars(int customerLevel)
         {
             return allCars
@@ -33,47 +37,60 @@ namespace AssignmentCARS
                 .ThenBy(c => c.Price);
         }
 
+        //shows Rent Car menu and handles selection logic
+        //returns possibly updated customer object after rental
         public static Customer Show(Customer customer, Action save)
         {
             while (true)
             {
-                Console.Clear();
+                Console.Clear(); //clear console and show header
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("===== RENT A CAR =====\n");
                 Console.ResetColor();
 
+                //get list of available cars for this user's level
                 var availableCars = GetAvailableCars(customer.Level).ToList();
 
+                //if no cars available, return to previuos menu
                 if (availableCars.Count == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No cars available for your level.");
                     Console.ResetColor();
-                    Pause();
+                    UIHelper.Pause();
                     return customer;
                 }
 
+                //display users current membership level
                 Console.WriteLine($"Your Level: {GetLevelName(customer.Level)}\n");
 
+                //display heading for car list
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Available cars:\n");
                 Console.ResetColor();
 
+                //loop through and display each available car
                 for (int i = 0; i < availableCars.Count; i++)
                 {
                     Car car = availableCars[i];
+                    //apply any level based discount
                     decimal discountedPrice = Discounts.Apply(car.Price, customer.Level);
                     Console.ForegroundColor = ConsoleColor.White;
+                    //display index number
                     Console.Write($"{i + 1}) ");
 
+                    //display car name
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write($"{car.Make} {car.Model}");
 
+                    //display car details
                     Console.ForegroundColor = ConsoleColor.White;             
                     Console.Write($" | Type:{car.Type} | Seats: {car.Seats}");
 
+                    //display base price
                     Console.Write($" | Base Price: £{car.Price:F2 |}");
 
+                    //display discounted price if available
                     if (discountedPrice != car.Price)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -81,41 +98,51 @@ namespace AssignmentCARS
                         Console.ResetColor();
                     }
 
+                    //display level requirement for car
                     Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     Console.WriteLine($"  | Level: {GetLevelName(car.RequiredLevel)}");
                     Console.ResetColor();
-                    Console.WriteLine(); //adds a blank line
+                    Console.WriteLine(); //adds a blank line for spacing
 
                 }
 
+                //option to return to previous menu
                 Console.WriteLine($"\n{availableCars.Count + 1}) Go Back");
                 Console.Write("\nChoose a car to rent: ");
 
+                //read user input
                 string input = Console.ReadLine()?.Trim() ?? "";
 
+                //validate numeric input
                 if (int.TryParse(input, out int choice))
                 {
+                    //go back option
                     if (choice == availableCars.Count + 1)
                         return customer;
 
+                    //valid car selection
                     if (choice >= 1 && choice <= availableCars.Count)
                     {
                         Car selectedCar = availableCars[choice - 1];
+                        //handle confirmation and rental logic
                         customer = ConfirmRental(customer, selectedCar, save);
-                        return customer; // return upgraded customer
+                        return customer; // return upgraded customer if level changed
                     }
 
+                    //invalid number
                     Console.WriteLine("\nInvalid option.");
-                    Pause();
+                    UIHelper.Pause();
                 }
                 else
                 {
+                    //non-numeric input
                     Console.WriteLine("\nInvalid input.");
-                    Pause();
+                    UIHelper.Pause();
                 }
             }
         }
 
+        //handles confirmation screen before finalising a rental
         private static Customer ConfirmRental(Customer customer, Car car, Action save)
         {
             while (true)
@@ -125,11 +152,14 @@ namespace AssignmentCARS
                 Console.WriteLine("===== CONFIRM RENTAL =====\n");
                 Console.ResetColor();
 
+                //show selected car details
                 Console.WriteLine($"Car: {car.Make} {car.Model}");
                 Console.WriteLine($"Type: {car.Type}");
 
+                //calculate final price including discounts
                 decimal finalPrice = Discounts.Apply(car.Price, customer.Level);
                 Console.WriteLine($"Price: £{car.Price:F2}/day\n");
+                //show discounted price if different
                 if (finalPrice != car.Price)
                     Console.WriteLine($"Your Price:");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -137,14 +167,16 @@ namespace AssignmentCARS
                 Console.ResetColor();
                 Console.WriteLine();
 
+                //ask user to confirm
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Confirm rental? (y/n): ");
                 Console.ResetColor();
 
                 string confirm = Console.ReadLine()?.Trim().ToLower() ?? "";
-
+                //user confirmed rental
                 if (confirm == "y" || confirm == "yes")
                 {
+                    //add rental to customer history
                     customer.AddRental($"{car.Make} {car.Model}");
 
                     //level upgrade happens inside AddRental()
@@ -156,37 +188,32 @@ namespace AssignmentCARS
                     Console.WriteLine($"Your current level: {GetLevelName(customer.Level)}");
                     Console.ResetColor();
 
-                    Pause();
+                    UIHelper.Pause();
                     return customer; // returns upgraded customer object if upgraded
                 }
+                //user cancelled rental
                 else if (confirm == "n" || confirm == "no")
                 {
                     Console.WriteLine("\nRental cancelled.");
-                    Pause();
+                    UIHelper.Pause();
                     return customer;
                 }
                 else
                 {
+                    //invalid confirmation input
                     Console.WriteLine("\nInvalid input. Enter 'y' or 'n'.");
-                    Pause();
+                    UIHelper.Pause();
                 }
             }
         }
 
+        //converts numeric level into name
         private static string GetLevelName(int level) => level switch
         {
             10 => "VIP",
             5 => "Premium",
             _ => "Standard"
         };
-
-        private static void Pause()
-        {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
-       
 
     }
 }

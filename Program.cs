@@ -8,6 +8,9 @@ namespace AssignmentCARS
 {
     class Program
     {
+        //comand line interface
+        //if program launched with arguments it attempts to run in admin mode
+        //separates admin features from normal user features- security/access control
         static void Main(string[] args)
         {
             // If admin login via CLI args
@@ -17,23 +20,29 @@ namespace AssignmentCARS
                 return;
             }
 
-            //load all customer files from /customers/
+            //load all customer data from (/customers/) binary files on startup
+            //DATA persistence
+            // allows data to survive after program is closed- persistent storage
             var customers = BinaryRepository.LoadAll();
 
-            //THIS FOR Multiple Processor Testing
+            //THIS FOR Performance Testing
             //RentCar.RunParallelTest();
 
 
-            //thi save action writes to all .dat files
+            //this save action saves updated customer data- writes back to all .dat files
+            //using Action keeps saving logic reusable and clean
             Action saveAll = () => BinaryRepository.SaveAll(customers);
 
+            //Injecting Pause() method improves flexibility and testability
+            var login = new Login(UIHelper.Pause);
+            var signup = new Signup(UIHelper.Pause);
 
-            var login = new Login(Pause);
-            var signup = new Signup(Pause);
-
+            //main application loop
+            //ensures app keeps running until user chooses to quit
             while (true)
             {
                 Console.Clear();
+                //colours and aninations added to make console UI more user friendly
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("HELLO, WELCOME TO");
                 Console.ResetColor();
@@ -47,6 +56,8 @@ namespace AssignmentCARS
                 //Console.WriteLine("(4) Performance Test");
                 Console.ResetColor();
                 Console.Write("\nChoose an option: ");
+
+                //using ReadKey improves responsiveness and prevents accidental extra input
                 char key = Console.ReadKey(true).KeyChar;
                 string input = key.ToString();
                 Console.WriteLine(key);
@@ -55,32 +66,35 @@ namespace AssignmentCARS
    
                 try
                 {
+                    //robustness- for input validation
+                    //TryParse prevents crashes from non-numeric input
                     if (!int.TryParse(input, out int option))
                         throw new FormatException();
 
+                    //defensive programming ensures only valid menu options accespted
                     if (option < 1 || option > 3)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Error: Please choose 1, 2, or 3.");
                         Console.ResetColor();
-                        Pause();
+                        UIHelper.Pause();
                         continue;
                     }
 
                     switch (option)
                     {
-                        case 1:
-                            Customer newCust = signup.Signup1(customers, saveAll);
+                        case 1: //signup flow
+                            Customer newCust = signup.Signup1(customers, saveAll); //creates new user, saves data, opens main menu
                             MainMenu.Show(newCust, saveAll);
                             break;
 
-                        case 2:
-                            Customer loggedIn = login.Login1(customers);
+                        case 2: //login flow
+                            Customer loggedIn = login.Login1(customers); //authenticates user and loads their data
                             MainMenu.Show(loggedIn, saveAll);
-                            saveAll();
+                            saveAll(); // saves updated data after session
                             break;
 
-                        case 3:
+                        case 3: //safe exit
                             Console.WriteLine("Goodbye!");
                             Thread.Sleep(1000);
                             Environment.Exit(0);
@@ -94,17 +108,21 @@ namespace AssignmentCARS
                 }
                 catch (FormatException)
                 {
+                    //robustness-user friendly errors
+                    //prevents crash when non-numeric input entered
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Error: Please enter a NUMBER, not letters.");
                     Console.ResetColor();
-                    Pause();
+                    UIHelper.Pause();
                 }
                 catch (Exception ex)
                 {
+                    //catch all error handling
+                    //protects program from unexpected runtime crashes
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Unexpected error: {ex.Message}");
                     Console.ResetColor();
-                    Pause();
+                    UIHelper.Pause();
                 }
             }
         }
@@ -142,12 +160,7 @@ namespace AssignmentCARS
         ////////    UP TO HERE  ////////////
 
 
-        static void Pause()
-        {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
+        //simple animation used to improve user experience
         static void ShowAnimatedBanner()
         {
             string[] banner = new[]
@@ -162,6 +175,7 @@ namespace AssignmentCARS
 
             Console.ForegroundColor = ConsoleColor.Blue;
 
+            //slow printing for animation effect
             foreach (var line in banner)
             {
                 Console.WriteLine(line);

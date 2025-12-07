@@ -8,21 +8,26 @@ using System.Threading.Tasks;
 
 namespace AssignmentCARS
 {
+    //this class was used to test and compare performance of different techniques
     public class PerformanceTest
     {
+        //tests how different multi-thread approaches perform on heavy data
         public void MultipleProcessors()
         {
             Console.Clear();
             Console.WriteLine("=== PERFORMANCE TESTS (USING MULTIPLE PROCESSORS) ===\n");
 
-            //Fresh dummy data
+            //creates large dummy data to simulate real wolrd heavy workloads
             List<Customer> customers = new List<Customer>();
 
             Console.WriteLine("Generating heavy dummy data...\n");
 
-            int customerCount = 100000;          // increased
-            int rentalsPerCustomer = 500;        // increased
+            int customerCount = 100000;          
+            int rentalsPerCustomer = 500;        
 
+
+            //populate list with fake customers and rental records
+            //simulates a high load realistic data scenario
             for (int i = 0; i < customerCount; i++)
             {
                 var c = new Customer($"C{i}", "pass", 1);
@@ -33,7 +38,7 @@ namespace AssignmentCARS
                 customers.Add(c);
             }
 
-            // HEAVY WORK METHOD — added only for profiling
+            // simulates CPU-heavy work so timing differences are more visible 
             int HeavyWork()
             {
                 int x = 0;
@@ -42,7 +47,7 @@ namespace AssignmentCARS
                 return x;
             }
 
-            // 1) foreach
+            // 1) normal sequential foreach loop (single threaded)
             Stopwatch sw = Stopwatch.StartNew();
 
             int total1 = 0;
@@ -54,7 +59,8 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"Normal foreach (HEAVY DATA): {sw.ElapsedMilliseconds} ms");
 
-            // 2) Parallel.ForEach
+            // 2) Parallel.ForEach uses multiple threads to divide work across CPU cores
+            //designed to improve performance on multi core machines
             sw.Restart();
 
             int total2 = 0;
@@ -66,7 +72,7 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"Parallel.ForEach (HEAVY DATA): {sw.ElapsedMilliseconds} ms");
 
-            // 3) Parallel.For
+            // 3) Parallel.For similar to Parallel.ForEach but index based
             sw.Restart();
 
             int total3 = 0;
@@ -78,7 +84,8 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"Parallel.For (HEAVY DATA): {sw.ElapsedMilliseconds} ms");
 
-            // 4) PLINQ
+            // 4) PLINQ (AsParallel) uses parallelised LINQ queries
+            //often very efficient becuase handles internal load balancing
             sw.Restart();
 
             int total4 = customers
@@ -88,13 +95,14 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"AsParallel() (HEAVY DATA): {sw.ElapsedMilliseconds} ms");
 
-            // NEW SMALL DATA TESTS
+            //small dataset tests to show that parallelism can be slower for smaller workloads
             Console.WriteLine("\n=== SMALL DATA TESTS (100 customers, 5 rentals) ===\n");
 
             List<Customer> smallCustomers = new List<Customer>();
             int smallCount = 100;
             int smallRentals = 5;
 
+            //generate smaller test data
             for (int i = 0; i < smallCount; i++)
             {
                 var c = new Customer($"Small{i}", "pass", 1);
@@ -103,7 +111,7 @@ namespace AssignmentCARS
                 smallCustomers.Add(c);
             }
 
-            // SMALL foreach
+            // SMALL foreach test
             sw.Restart();
             int s1 = 0;
             foreach (var c in smallCustomers)
@@ -136,6 +144,7 @@ namespace AssignmentCARS
         }
 
         // STRING vs STRINGBUILDER
+        //compares performance of string concatenation to StringBuilder
         public void StringVsStringBuilder()
         {
             Console.Clear();
@@ -143,6 +152,7 @@ namespace AssignmentCARS
 
             int loops = 50000;
 
+            //normal string concatention- small due to string immutability
             Stopwatch sw = Stopwatch.StartNew();
             string slow = "";
             for (int i = 0; i < loops; i++)
@@ -150,6 +160,7 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"String: {sw.ElapsedMilliseconds} ms");
 
+            //StringBuilder is designed for fast appending in loops
             sw.Restart();
             StringBuilder sb = new();
             for (int i = 0; i < loops; i++)
@@ -157,7 +168,7 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"StringBuilder: {sw.ElapsedMilliseconds} ms");
 
-            // NEW SMALL STRING TEST
+            // NEW SMALL STRING TEST- small scale to show differences are less visible on small workloads
             Console.WriteLine("\n--- SMALL STRING TEST (100 loops) ---");
 
             sw.Restart();
@@ -180,6 +191,7 @@ namespace AssignmentCARS
 
 
         //Capacity
+        //tests performance of List growth with and without pre setting Capacity
         public void CapacityTest()
         {
             Console.Clear();
@@ -189,14 +201,14 @@ namespace AssignmentCARS
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            // 1) No capacity
+            // 1) No pre allocated capacity (list has to constantly resize itself)
             List<int> normalList = new List<int>();
             for (int i = 0; i < items; i++)
                 normalList.Add(i);
             sw.Stop();
             Console.WriteLine($"Without capacity (HEAVY): {sw.ElapsedMilliseconds} ms");
 
-            // 2) With capacity
+            // 2) With pre setting capacity reduces internal resizing and memory copying
             sw.Restart();
             List<int> capacityList = new List<int>(items);
             for (int i = 0; i < items; i++)
@@ -204,7 +216,7 @@ namespace AssignmentCARS
             sw.Stop();
             Console.WriteLine($"With pre-set capacity (HEAVY): {sw.ElapsedMilliseconds} ms");
 
-            // NEW SMALL CAPACITY TEST
+            // SMALL scale CAPACITY TEST
             Console.WriteLine("\n--- SMALL CAPACITY TEST (1000 items) ---");
 
             int smallItems = 1000;
@@ -228,14 +240,17 @@ namespace AssignmentCARS
         }
 
         // CACHING
+        //simple dictionary based cahce used to avoid repeated expensive calculations
         Dictionary<int, int> factorialCache = new();
 
+        //simulates a very slow expensive calculation
         private int ExpensiveFactorial(int n)
         {
             Thread.Sleep(2); // fake heavy work
             return n == 0 ? 1 : n * ExpensiveFactorial(n - 1);
         }
 
+        //cached version avoids recomputing repeated values
         private int CachedFactorial(int n)
         {
             if (factorialCache.TryGetValue(n, out int value))
@@ -246,6 +261,7 @@ namespace AssignmentCARS
             return result;
         }
 
+        //demonstrates real performance difference between cached and non cached logic
         public void CachingTest()
         {
             Console.Clear();
@@ -253,12 +269,14 @@ namespace AssignmentCARS
 
             int loops = 10;
 
+            //without caching
             Stopwatch sw = Stopwatch.StartNew();
             for (int i = 0; i < loops; i++)
                 ExpensiveFactorial(10);
             sw.Stop();
             Console.WriteLine($"Without cache: {sw.ElapsedMilliseconds} ms");
 
+            //with caching
             sw.Restart();
             for (int i = 0; i < loops; i++)
                 CachedFactorial(10);
