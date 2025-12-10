@@ -35,3 +35,29 @@ namespace AssignmentCARS
         }
     }
 }
+
+
+/*
+ * TEST CASES FOR DISCOUNTS CLASS:
+ * 
+ * Test Case 1: Standard Customer Discount (Level 1)
+ * Input: price=£100.00, level=1
+ * Expected Output: £100.00 (0% discount applied)
+ * Result: Displays price as £100.00
+ * 
+ * Test Case 2: Premium Customer Discount (Level 5)
+ * Input: price=£100.00, level=5
+ * Expected Output: £90.00 (10% discount applied)
+ * Result: Displays price as £90.00
+ * 
+ * Test Case 3: VIP Customer Discount (Level 10)
+ * Input: price=£100.00, level=10
+ * Expected Output: £85.00 (15% discount applied)
+ * Result: Displays price as £85.00
+ * 
+ * 
+ * Test Case 4: Real VIP Car Price (Ferrari F8)
+ * Input: price=£900.00, level=10
+ * Expected Output: £765.00 (15% discount = £900 - £135)
+ * Result: Displays price as £765.00
+ */

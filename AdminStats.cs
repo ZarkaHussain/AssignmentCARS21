@@ -95,3 +95,71 @@ namespace AssignmentCARS
         }
     }
 }
+
+
+/*
+ * TEST CASES FOR ADMIN STATS:
+ * 
+ * TC1: Total Rentals with no customers
+ * Input: Empty customer folder (LoadAll returns empty dictionary)
+ * Expected Output: Displays "Total number of cars rented in the system: 0"
+ * Result: PASS – As expected 0 rentals displayed 
+ * 
+ * TC2: Total Rentals with single customer
+ * Input: 1 customer with 5 rentals in their RentalHistory
+ * Expected Output: Displays "Total number of cars rented in the system: 5"
+ * Result: PASS – Total displayed correctly
+ * 
+ * TC3: Total Rentals with multiple customers
+ * Input: 3 customers with 2, 5, and 3 rentals in their RentalHistory respectively
+ * Expected Output: Displays "Total number of cars rented in the system: 10" 
+ * Result: PASS – Total displayed correctly
+ * 
+ * TC4: Most Rented Cars with no customers
+ * Input: Empty customer folder (LoadAll returns empty dictionary)
+ * Expected Output: Displays "No rentals recorded."
+ * Result: PASS – Displays "No rentals recorded"
+ * 
+ * TC5: Most Rented Cars with no rentals
+ * Input: Customers exist but all have empty RentalHistory (Count = 0)
+ * Expected Output: Displays "No rentals recorded"
+ * Result: PASS - Displays "No rentals recorded"
+ * 
+ * TC6: Most Rented Cars - one car type
+ * Input: "Toyota Corolla" rented 5 times across all customers
+ * Expected Output: Displays "Toyota Corolla: 5 times"
+ * Result: PASS - Displays "Toyota Corolla: 5 times"
+ * 
+ * TC7: Most Rented Cars - multiple car types (Ordered by Count)
+ * Input: Toyota Corolla rented 5 times, Honda Civic rented 3 times, Ford Focus rented 1 time
+ * Expected Output: Displays in descending order:
+ * "Toyota Corolla: 5 times"
+ * "Honda Civic: 3 times"
+ * "Ford Focus: 1 times"
+ * Result: PASS - Displayed in correct order
+ * 
+ * TC9: Cache - First run
+ * Input: First time calling ShowMostRentedCars() when cache is empty
+ * Expected Output: Loads data from files, calculates counts, saves to cache, shows results
+ * Result: PASS - Worked as expected and results were shown
+ * 
+ * TC10: Cache - Second run (Using Cache)
+ * Input: Call ShowMostRentedCars() again straight after TC9
+ * Expected Output: Uses cached results and does not recalculate
+ * Result: PASS - Results appeared instantly and no delay noticed
+ * 
+ * TC11: Cache Invalidation
+ * Input: Call InvalidateCache() then run ShowMostRentedCars()
+ * Expected Output: Cache cleared and data recalculated from files
+ * Result: PASS - New results were calculated after clearing cache
+ * 
+ * TC12: Cache Not Invalidated After Data Change
+ * Input: Add new rental data but DO NOT call InvalidateCache()
+ * Expected Output: Should show updated results with new rentals
+ * Result: FAIL - Output still showed old cached data (this showed why cache invalidation is needed)
+ * 
+ * TC13: Corrupted Customer File
+ * Input: Manually corrupted a .dat file before running ShowMostRentedCars()
+ * Expected Output: Program should attempt to load data and handle file issues via BinaryRepository without crashing
+ * Result: FAIL - Program showed incorrect rental counts due to corrupted data this shows limitation when source data damaged
+ */

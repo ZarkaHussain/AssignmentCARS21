@@ -22,6 +22,7 @@ namespace AssignmentCARS
 
             Console.WriteLine("Generating heavy dummy data...\n");
 
+
             int customerCount = 100000;          
             int rentalsPerCustomer = 500;        
 
@@ -96,10 +97,10 @@ namespace AssignmentCARS
             Console.WriteLine($"AsParallel() (HEAVY DATA): {sw.ElapsedMilliseconds} ms");
 
             //small dataset tests to show that parallelism can be slower for smaller workloads
-            Console.WriteLine("\n=== SMALL DATA TESTS (100 customers, 5 rentals) ===\n");
+            Console.WriteLine("\n=== SMALL DATA TESTS (10 customers, 5 rentals) ===\n");
 
             List<Customer> smallCustomers = new List<Customer>();
-            int smallCount = 100;
+            int smallCount = 10;
             int smallRentals = 5;
 
             //generate smaller test data

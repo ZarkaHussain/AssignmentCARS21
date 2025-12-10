@@ -109,3 +109,112 @@ namespace AssignmentCARS
 
 
 
+/*
+ * TEST CASES FOR ADMIN AUTH:
+ * 
+ * TC1: Valid Admin Login in correct format
+ * Input: args = ["admin", "admin", "1234"]
+ * Command: ./AssignmentCARS admin admin 1234
+ * Expected Output: Successfully authenticates and displays admin dashboard menu
+ * Result: PASS - Successful login and admin menu displayed
+ * 
+ * TC2: Invalid Username
+ * Input: args = ["admin", "wrong", "1234"]
+ * Command: ./AssignmentCARS admin wrong 1234
+ * Expected Output: Displays "Invalid admin login." in red text, exits to terminal
+ * Result: PASS - Displays "Invalid admin login" - login rejected
+ * 
+ * TC3: Invalid Password
+ * Input: args = ["admin", "admin", "2321"]
+ * Command: ./AssignmentCARS admin admin 2321
+ * Expected Output: Displays "Invalid admin login." in red text, exits to terminal
+ * Result: PASS - Displays "Invalid admin login" - login rejected
+ * 
+ * TC4: Both Username and Password invalid
+ * Input: args = ["admin", "wrong", "2321"]
+ * Command: ./AssignmentCARS admin wrong 2321
+ * Expected Output: Displays "Invalid admin login." in red text, exits to terminal
+ * Result: PASS - Displays "Invalid admin login" - login rejected
+ * 
+ * TC5: No Arguments Provided
+ * Input: args = []
+ * Command: ./AssignmentCARS
+ * Expected Output: Displays normal user menu
+ * Result: PASS - Normal user menu displayed
+ * 
+ * TC6: Wrong Command Word
+ * Input: args = ["user"]
+ * Command: ./AssignmentCARS user
+ * Expected Output: Displays "Unknown or missing command. Use: AssignmentCARS.exe admin <username> <password>"
+ * Result: PASS - Unknown or missing command. Use: AssignmentCARS.exe admin <username> <password>
+ * 
+ * TC7: Typo in Command
+ * Input: args = ["adminf"]
+ * Command: ./AssignmentCARS adminf
+ * Expected Output: Displays "Unknown or missing command. Use: AssignmentCARS.exe admin <username> <password>"
+ * Result: PASS - Unknown or missing command. Use: AssignmentCARS.exe admin <username> <password>
+ * 
+ * TC8: Only Command Provided (Missing Username and Password)
+ * Input: args = ["admin"]
+ * Command: ./AssignmentCARS admin
+ * Expected Output: Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * Result: PASS - Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * 
+ * TC9: Missing Password (Only Command and Username)
+ * Input: args = ["admin", "admin"]
+ * Command: ./AssignmentCARS admin admin
+ * Expected Output: Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * Result: PASS - Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * 
+ * TC10: Case-Insensitive Command
+ * Input: args = ["ADMIN", "admin", "1234"]
+ * Command: ./AssignmentCARS ADMIN admin 1234
+ * Expected Output: Successfully logs in to admin dashboard (command converted to lowercase via .ToLower())
+ * Result: PASS - Successfully logs in and admin dashboard displayed
+ * 
+ * TC11: Admin Menu - Select Valid Option
+ * Input: User presses '1' in admin dashboard
+ * Expected Output: Calls AdminStats.ShowTotalRentals() this displays total rental count
+ * Result: PASS - Total Rentals shown
+ * 
+ * TC12: Admin Menu - Select Invalid Option
+ * Input: User presses 'x' or any invalid key in admin dashboard
+ * Expected Output: Displays "Invalid option.", pauses then returns to menu
+ * Result: PASS - Displays "Invalid option" returns to menu
+ * 
+ * TC13: Admin Menu - Exit
+ * Input: User presses '5' in admin dashboard
+ * Expected Output: Exits admin menu, returns to terminal
+ * Result: PASS -  Admin menu closed and returned to terminal 
+ * 
+ * TC14: Extra Arguments Passed
+ * Input: args = ["admin", "admin", "1234", "extra"]
+ * Command: ./AssignmentCARS admin admin 1234 extra
+ * Expected Output: Should either warn about extra arguments or ignore them gracefully
+ * Result: FAIL – Still logs in successfully
+ * 
+ * TC15: Username with trailing spaces
+ * Input: args = ["admin", "admin ", "1234"]
+ * Command: ./AssignmentCARS admin "admin " 1234
+ * Expected Output: Should trim input and allow login
+ * Result: PASS – Login successful
+ * 
+ * TC17: Mixed Case Username
+ * Input: args = ["admin", "Admin", "1234"]
+ * Command: ./AssignmentCARS admin Admin 1234
+ * Expected Output: Login should succeed if username comparison was case-insensitive
+ * Result: FAIL – Login failed. Displays "Invalid admin login"
+ * 
+ * TC18: Empty Username
+ * Input: args = ["admin", "", "1234"]
+ * Command: ./AssignmentCARS admin "" 1234
+ * Expected Output: Should display a clear error message for empty username
+ * Result: FAIL – Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * 
+ * TC19: Empty Password
+ * Input: args = ["admin", "admin", ""]
+ * Command: ./AssignmentCARS admin admin ""
+ * Expected Output: Should display a clear error message for empty password
+ * Result: FAIL – Displays "Usage: AssignmentCARS.exe admin <username> <password>"
+ * 
+ */

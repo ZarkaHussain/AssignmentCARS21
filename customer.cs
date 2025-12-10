@@ -127,5 +127,32 @@ namespace AssignmentCARS
                 rentalHistory.Add(br.ReadString());
         }        
     }
-}  
+}
 
+//TEST CASES FOR CUSTOMER CLASS:
+
+/* TC1: Customer Creation
+ * Input: name="James Duncan", password="password123", level=1
+ * Expected Output: Customer object created with CustomerID (GUID), Level=1, empty RentalHistory
+ * Result: PASS - Customer created successfully
+ * 
+ * TC2: Adding Rental to History
+ * Input: customer.AddRental("Toyota Corolla")
+ * Expected Output: RentalHistory count increases by 1, car name stored correctly
+ * Result: PASS – Rental added to RentalHistory successfully
+ * 
+ * TC3: Upgrade to Premium (5 rentals)
+ * Input: Add 5 rentals to a standard customer
+ * Expected Output: Level automatically upgrades from 1 to 5 after 5th rental
+ * Result: PASS – Upgraded to Premium successfully
+ * 
+ * TC4: Upgrade to VIP (10 rentals)
+ * Input: Add 10 rentals to a standard customer
+ * Expected Output: Level automatically upgrades from 5 to 10 after 10th rental (goes through Premium first)
+ * Result: PASS – Upgraded to VIP successfully
+ * 
+ * TC5: No Upgrade with Insufficient Rentals
+ * Input: Add 3 rentals to a standard customer
+ * Expected Output: Level remains at 1 (no upgrade)
+ * Result: PASS – NOT upgraded- remains as standard customer
+ */
