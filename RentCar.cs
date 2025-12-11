@@ -37,6 +37,22 @@ namespace AssignmentCARS
                 .ThenBy(c => c.Price);
         }
 
+        //
+        //this is a public helper method for the unit testing
+        public static List<Car> GetCarsByLevel(int level)
+        {
+            List<Car> result = new List<Car>();
+
+            foreach (var car in allCars)
+            {
+                if (car.RequiredLevel <= level)
+                    result.Add(car);
+            }
+
+            return result;
+        }
+        //
+
         //shows Rent Car menu and handles selection logic
         //returns possibly updated customer object after rental
         public static Customer Show(Customer customer, Action save)

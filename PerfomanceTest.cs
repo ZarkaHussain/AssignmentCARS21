@@ -287,6 +287,115 @@ namespace AssignmentCARS
             Console.WriteLine("\nPress ENTER to return...");
             Console.ReadLine();
         }
+
+        //this checks if loading lots of real customers bcomes slow and if caching/optimisation makes a difference
+        public void TestRepositoryPerformance()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Binary Repostory performance test ===\n");
+
+            var sw = new Stopwatch();
+
+            //nomal load test
+            sw.Start();
+            var customers1 = BinaryRepository.LoadAll();
+            sw.Stop();
+            Console.WriteLine($"Repeated LoadAll(): {sw.ElapsedMilliseconds} ms");
+            Console.WriteLine("\nPress ENTER...");
+            Console.ReadLine();
+        }
+
+        public void TestAdminStatsCaching()
+        {
+            Console.Clear();
+            Console.WriteLine("=== ADMIN STATS CACHE TEST ===\n");
+
+            var sw = new Stopwatch();
+
+            // Clear cache first
+            AdminStats.InvalidateCache();
+
+            // First run (no cache)
+            sw.Start();
+            AdminStats.ShowMostRentedCars();
+            sw.Stop();
+            Console.WriteLine($"First run (no cache): {sw.ElapsedMilliseconds} ms");
+
+            // Second run (with cache)
+            sw.Restart();
+            AdminStats.ShowMostRentedCars();
+            sw.Stop();
+            Console.WriteLine($"Second run (cached): {sw.ElapsedMilliseconds} ms");
+
+            Console.WriteLine("\nPress ENTER...");
+            Console.ReadLine();
+        }
+
+        public void TestStringOutputPerformance()
+        {
+            Console.Clear();
+            Console.WriteLine("=== STRING OUTPUT PERFORMANCE TEST ===\n");
+
+            var customers = BinaryRepository.LoadAll();
+            var list = customers.Values.ToList();
+
+            var sw = new Stopwatch();
+
+            // Normal string concatenation
+            sw.Start();
+            string output = "";
+            foreach (var c in list)
+                output += c.Name + "\n";
+            sw.Stop();
+            Console.WriteLine($"String concat: {sw.ElapsedMilliseconds} ms");
+
+            // StringBuilder
+            sw.Restart();
+            var sb = new StringBuilder();
+            foreach (var c in list)
+                sb.AppendLine(c.Name);
+            sw.Stop();
+            Console.WriteLine($"StringBuilder: {sw.ElapsedMilliseconds} ms");
+
+            Console.WriteLine("\nPress ENTER...");
+            Console.ReadLine();
+        }
+
+        public void TestParallelRentalCounting()
+        {
+            //tested parallelism with real repository data here
+            //paralel was slower so didnt add to my application files
+            Console.Clear();
+            Console.WriteLine("=== PARALLEL RENTAL COUNT TEST ===\n");
+
+            var customers = BinaryRepository.LoadAll();
+
+            var sw = new Stopwatch();
+
+            // Normal version
+            sw.Start();
+            int total1 = 0;
+            foreach (var c in customers.Values)
+                total1 += c.RentalHistory.Count;
+            sw.Stop();
+            Console.WriteLine($"Sequential: {sw.ElapsedMilliseconds} ms");
+
+            // Parallel version
+            sw.Restart();
+            int total2 = 0;
+            Parallel.ForEach(customers.Values, c =>
+            {
+                Interlocked.Add(ref total2, c.RentalHistory.Count);
+            });
+            sw.Stop();
+            Console.WriteLine($"Parallel: {sw.ElapsedMilliseconds} ms");
+
+            Console.WriteLine("\nPress ENTER...");
+            Console.ReadLine();
+        }
+
+
+
     }
 }
 

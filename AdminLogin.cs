@@ -11,6 +11,19 @@ namespace AssignmentCARS
         private readonly string _adminUser = "admin";
         private readonly string _adminPass = "1234";
 
+        //
+        //for the UnitTests- helper method
+        public bool Validate(string[] args)
+        {
+            if (args.Length < 3) return false;
+
+            string user = args[1];
+            string pass = args[2];
+
+            return user == _adminUser && pass == _adminPass;
+        }
+        //
+
         //entry point for admin mode using command line arguments
         //args are passed in from the terminal when launching the application
 
