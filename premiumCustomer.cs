@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using AssignmentCARS;
 
 namespace AssignmentCARS
 {
@@ -40,3 +41,14 @@ namespace AssignmentCARS
         }
     }
 }
+
+//My application uses inheritance and polymorphism to make the system flexible and easy to extend.​
+
+//I created specialised customer types like PremiumCustomer and VIPCustomer that inherit from a base Customer class.​
+// This means shared data such as CustomerID, Name, Password, and RentalHistory is written once and reused, which reduces duplication and keeps the code easier to maintain.​
+
+//In my code, this is shown by classes like:​
+
+//PremiumCustomer: Customer​
+
+//VIPCustomer : Customer

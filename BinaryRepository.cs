@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 using System.Reflection.Metadata;
+using AssignmentCARS;
 
 namespace AssignmentCARS
 {
@@ -251,3 +252,19 @@ namespace AssignmentCARS
  * Expected Output: Should find the customer using their CustomerID
  * Result: PASS - Saved a customer with GUID, ran LoadAll(), then retrieved the customer from the dictionary using their CustomerID. Got the correct customer object back with all properties intact.
  */
+
+//My application uses manual binary serialisation to save and load customer data between program sessions, so data safely stored and restored every time the program runs.​
+//I implemented custom SaveBinary() and LoadBinary() methods using BinaryWriter and BinaryReader.​
+//Customer data is written in a strict, predictable order:​
+//CustomerID​
+//Name​
+//Password​
+//Level​
+//Rental history count​
+//Each rental entry​
+//​
+
+//When loading, I read the data back in the exact same order, which prevents data corruption and guarantees reliable object reconstruction.​
+//To improve performance, I pre-allocate list capacity using:​
+//new List<string>(count)​
+//during deserialization, which reduces memory reallocations and improves loading speed.​

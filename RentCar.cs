@@ -104,7 +104,7 @@ namespace AssignmentCARS
                     Console.Write($" | Type:{car.Type} | Seats: {car.Seats}");
 
                     //display base price
-                    Console.Write($" | Base Price: £{car.Price:F2 |}");
+                    Console.Write($" | Base Price: £{car.Price:F2}|");
 
                     //display discounted price if available
                     if (discountedPrice != car.Price)

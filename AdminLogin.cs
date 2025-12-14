@@ -1,4 +1,5 @@
 ﻿using System;
+using AssignmentCARS;
 
 namespace AssignmentCARS
 {
@@ -231,3 +232,7 @@ namespace AssignmentCARS
  * Result: FAIL – Displays "Usage: AssignmentCARS.exe admin <username> <password>"
  * 
  */
+
+//I implemented admin login using Command Line Interface(CLI) arguments, where admin passes their username and password through args parameter when program starts. ​
+//separating admin and customer functionality, which improves security by keeping admin features away from public menus.admin dashboard can’t be accessed unless correct command is used, which prevents casual users from viewing or modifying sensitive data like customer records and statistics. 
+//The program validates number of arguments, the command keyword, and shows clear error messages if input is incorrect. If authentication fails, program stops cleanly instead of entering an invalid state. 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using AssignmentCARS;
 
 namespace AssignmentCARS
 {
@@ -14,7 +17,7 @@ namespace AssignmentCARS
     public static class AdminStats
     {
         //added simple cache to store results of expensive calculations
-        //improves performance by avoiding repeated loops adn disk readss
+        //improves performance by avoiding repeated loops and disk readss
 
         // key is car name, value= how many times rented 
         private static Dictionary<string, int>? rentalCountCache = null;
@@ -269,6 +272,13 @@ namespace AssignmentCARS
 //Parallel.For: 6889 ms
 //AsParallel: 4885 ms
 //this test with my actual app logic showed that with 1,000,000 customers and 100 rentals AsParallel worked faster
+//These terminal outputs support the performance techniques used in my application.​
+//I tested my real application logic using 1,000,000 customers with 100 rentals each to simulate heavy real-world load. Small-scale tests (such as 10 customers with 5 rentals) showed little to no performance difference, which is expected because most optimisations only show benefits at scale.​
+//Large-scale tests showed that StringBuilder was much faster than normal string concatenation due to reduced memory allocations. Tests comparing foreach, Parallel.For, Parallel.ForEach and AsParallel() showed different execution times because of thread overhead and workload distribution, with PLINQ (AsParallel) performing best for CPU-intensive work by balancing threads more efficiently.
+
+//Caching tests showed that retrieving pre-computed results was much faster than recalculating data, proving that caching improves system performance by avoiding repeated work.​
+//List capacity tests also showed that pre-allocating capacity improved performance for large datasets.​
+//These results confirm that the optimisations I chose are effective and suitable for a system designed to scale and support many more users and rentals over time.​​
 
 /*
  * TEST CASES FOR ADMIN STATS:
@@ -336,3 +346,35 @@ namespace AssignmentCARS
  * Expected Output: Program should attempt to load data and handle file issues via BinaryRepository without crashing
  * Result: FAIL - Program showed incorrect rental counts due to corrupted data this shows limitation when source data damaged
  */
+
+//When loading from a binary file, the number of rentals is stored and read first, allowing the list to be sized precisely. This avoids repeated resizing and memory reallocation during item addition, improving performance and reducing memory usage, especially for large rental histories.​
+
+//I did not use preset capacity elsewhere because most collections grow dynamically at runtime (customers signing up, rentals being added). In these cases, pre-allocating capacity would require guessing sizes, which can waste memory and complicate code with little guaranteed benefit.​
+
+//Even as the system grows, this optimisation remains valid because file loading is deterministic with a known data size, making preset capacity safe and efficient.​
+
+//Benefits:​
+//Faster deserialization​
+//Less memory reallocation​
+//Scales well as rental histories grow​
+
+//​
+//​
+
+//I used AsParallel() in AdminStats because calculating rental statistics is a CPU-bound operation that processes large in-memory datasets and scales with the number of customers and rentals.​
+
+//Testing with heavy dummy data showed that AsParallel() performed best with very large datasets (e.g. 1,000,000 customers × 100 rentals). To balance current performance with future scalability, I implemented conditional parallelism, so parallel execution is only used when the dataset is large enough.​
+
+//This ensures:​
+//No unnecessary overhead for small datasets​
+//Automatic performance improvements as the system grows​
+//Safe multi-threading using ConcurrentDictionary​
+
+//Benefits:​
+//Scales with CPU cores​
+//Faster statistics on large datasets​
+//Future-proof design without harming current performance​
+//​
+//​
+
+//I used preset list capacity only where the data size is known in advance (LoadBinary()), and used conditional parallel LINQ in AdminStats because it scales naturally with large datasets, making both optimisations targeted, justified, and future-proof.​​

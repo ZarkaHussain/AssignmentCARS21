@@ -54,7 +54,7 @@ namespace AssignmentCARS
                 Console.WriteLine("(2) Login");
                 Console.WriteLine("(3) Quit");
                 //Console.WriteLine("(4) Performance Test");
-                Console.WriteLine("(5) Run Unit Tests"); //UnitTests
+                //Console.WriteLine("(5) Run Unit Tests"); //UnitTests
                 Console.ResetColor();
                 Console.Write("\nChoose an option: ");
 
@@ -73,7 +73,7 @@ namespace AssignmentCARS
                         throw new FormatException();
 
                     //defensive programming ensures only valid menu options accespted
-                    if (option < 1 || option > 5)
+                    if (option < 1 || option > 3)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Error: Please choose 1, 2, or 3.");
@@ -113,10 +113,10 @@ namespace AssignmentCARS
                         //    AdminStats.DummyDataTest_ShowMostRentedCars();
                         //    break;
 
-                        case 5:
-                            UnitTests.Run();
-                            UIHelper.Pause();
-                            break;
+                        //case 5:
+                        //    UnitTests.Run();
+                        //    UIHelper.Pause();
+                        //    break;
 
                     }
                 }
